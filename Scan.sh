@@ -18,3 +18,10 @@ fi
 curl -X POST https://hook.us1.make.com/YOUR_WEBHOOK_URL \
   -H "Content-Type: application/json" \
   -d "{\"results\": \"$(cat results.txt | sed 's/\"/\\"/g')\"}"
+#!/bin/sh
+
+# Update nuclei templates
+nuclei -update-templates
+
+# Run nuclei on target.txt
+nuclei -l target.txt -o result.txt
