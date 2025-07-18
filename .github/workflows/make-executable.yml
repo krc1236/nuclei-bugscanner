@@ -1,0 +1,24 @@
+name: Make scan.sh Executable
+
+on:
+  push:
+    paths:
+      - scan.sh
+
+jobs:
+  chmod:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Make scan.sh executable
+        run: chmod +x scan.sh
+
+      - name: Commit change
+        run: |
+          git config user.name "GitHub Action"
+          git config user.email "action@github.com"
+          git add scan.sh
+          git commit -m "Make scan.sh executable" || echo "No changes"
+          git push
