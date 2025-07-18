@@ -1,1 +1,1 @@
-# nuclei-bugscanner
+# nuclei-bugscanner-repo
