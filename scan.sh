@@ -1,21 +1,33 @@
 #!/bin/bash
 
-# Check for required environment variable
-if [ -z "$WEBHOOK_URL" ]; then
-  echo "WEBHOOK_URL not set"
-  exit 1
+# Exit on error
+set -e
+
+# Define your scan target
+TARGET_URL="https://example.com"  # Replace this with your actual target URL or domain list
+
+# Download latest templates if not already present
+if [ ! -d "./templates" ]; then
+  nuclei -update-templates
+else
+  nuclei -update-templates -ut ./templates
 fi
 
-# Run the scan and save output to file
-nuclei -u https://testphp.vulnweb.com -o result.json -json
+# Run Nuclei scan with JSON output
+nuclei -target "$TARGET_URL" -t ./templates -o result.json -json
 
-# Check if the output file exists
-if [ ! -f result.json ]; then
-  echo "No results file found"
-  exit 1
+# Check if result file exists and is not empty
+if [ -s result.json ]; then
+  echo "Scan completed. Results:"
+  cat result.json
+
+  # Optional: Send results to a webhook (e.g., Make / Zapier)
+  if [ ! -z "$WEBHOOK_URL" ]; then
+    curl -X POST -H "Content-Type: application/json" --data @result.json "$WEBHOOK_URL"
+    echo "Results sent to webhook."
+  else
+    echo "No WEBHOOK_URL set, skipping webhook upload."
+  fi
+else
+  echo "No results found or empty output."
 fi
-
-# Send the results to your webhook (Make, Discord, etc.)
-curl -X POST -H "Content-Type: application/json" \
-     -d @"result.json" \
-     "$WEBHOOK_URL"
