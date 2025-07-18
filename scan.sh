@@ -1,14 +1,10 @@
 #!/bin/sh
 
-echo "Running Nuclei scan..."
+# Set the target (replace with your actual target or input source)
+echo "https://example.com" > urls.txt
 
-# Create directory for output if not exists
-mkdir -p /output
+# Update nuclei templates
+nuclei -update-templates
 
-# Run a simple scan (you can expand this with your target list)
-echo "https://example.com" > /tmp/targets.txt
-
-# Run nuclei
-nuclei -l /tmp/targets.txt -o /output/result.txt
-
-echo "Scan complete. Output saved to /output/result.txt"
+# Run nuclei with lightweight settings to avoid OOM (Out of Memory)
+nuclei -l urls.txt -t cves/ -severity medium,high,critical -rl 20 -c 10 -nc -json -o results.json
