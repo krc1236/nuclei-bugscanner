@@ -1,10 +1,16 @@
 #!/bin/bash
 
-# Default input URL for nuclei
+# Download nuclei templates if not already present
+if [ ! -d "/root/nuclei-templates" ]; then
+  echo "[*] Downloading nuclei-templates..."
+  git clone https://github.com/projectdiscovery/nuclei-templates.git /root/nuclei-templates
+fi
+
+# Create a sample input file
 echo "https://example.com" > input.txt
 
-# Run nuclei scan and save output
-nuclei -l input.txt -o output.txt
+# Run nuclei scan
+nuclei -l input.txt -t /root/nuclei-templates -o output.txt
 
-# Print the results
+# Show output
 cat output.txt
