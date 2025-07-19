@@ -1,10 +1,16 @@
 #!/bin/sh
 
-# Make sure templates are updated
+# Download latest templates
 nuclei -update-templates
 
-# Set target (replace with a domain or put in urls.txt)
-echo "https://example.com" > urls.txt
+# Check if input.txt exists
+if [ ! -f input.txt ]; then
+  echo "❌ input.txt not found!"
+  exit 1
+fi
 
-# Run a lightweight scan to avoid memory errors
-nuclei -l urls.txt -t cves/ -severity medium,high,critical -rl 15 -c 5 -json -o results.json
+echo "📡 Starting Nuclei scan..."
+nuclei -l input.txt -o output.json
+
+echo "✅ Scan complete. Output:"
+cat output.json
