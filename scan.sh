@@ -1,16 +1,11 @@
-#!/bin/sh
 
-# Download latest templates
-nuclei -update-templates
+#!/bin/bash
 
-# Check if input.txt exists
-if [ ! -f input.txt ]; then
-  echo "❌ input.txt not found!"
-  exit 1
-fi
+# Default input URL for nuclei
+echo "https://example.com" > input.txt
 
-echo "📡 Starting Nuclei scan..."
-nuclei -l input.txt -o output.json
+# Run nuclei scan and save output
+nuclei -l input.txt -o output.txt
 
-echo "✅ Scan complete. Output:"
-cat output.json
+# Print the results
+cat output.txt
