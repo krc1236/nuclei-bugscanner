@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # Default input URL for nuclei
