@@ -3,22 +3,21 @@ name: Make scan.sh Executable
 on:
   push:
     paths:
-      - scan.sh
+      - 'scan.sh'
 
 jobs:
   chmod:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout repo
         uses: actions/checkout@v3
 
       - name: Make scan.sh executable
         run: chmod +x scan.sh
 
-      - name: Commit change
+      - name: Commit changes
         run: |
-          git config user.name "GitHub Action"
-          git config user.email "action@github.com"
-          git add scan.sh
-          git commit -m "Make scan.sh executable" || echo "No changes"
-          git push
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git commit -am "Make scan.sh executable" || echo "No changes to commit"
+          git push || echo "Nothing to push"
